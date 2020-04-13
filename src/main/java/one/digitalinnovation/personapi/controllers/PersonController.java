@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController("/api/v1/person")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -31,6 +32,11 @@ public class PersonController {
     @ResponseStatus(HttpStatus.OK)
     public PersonDTO findById(Long id) throws PersonNotFoundException {
         return personService.findById(id);
+    }
+
+    @GetMapping
+    public List<PersonDTO> listAll() {
+        return personService.listAll();
     }
 
     @PostMapping("{id}")
