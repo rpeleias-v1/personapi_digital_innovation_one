@@ -27,9 +27,15 @@ public class PersonController {
         return personService.create(personDTO);
     }
 
-    @GetMapping
+    @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDTO findById(Long id) throws PersonNotFoundException {
         return personService.findById(id);
+    }
+
+    @PostMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageResponseDTO update(Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.update(id, personDTO);
     }
 }
