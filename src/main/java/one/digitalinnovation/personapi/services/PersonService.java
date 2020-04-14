@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,11 +31,10 @@ public class PersonService {
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
-        return personMapper.toDTO(person.get());
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
+        return personMapper.toDTO(person);
     }
 
     public List<PersonDTO> listAll() {
@@ -47,10 +45,9 @@ public class PersonService {
     }
 
     public MessageResponseDTO update(Long id, PersonDTO personDTO) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
+        personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
         Person updatedPerson = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(updatedPerson);
 
@@ -59,16 +56,11 @@ public class PersonService {
         return messageResponse;
     }
 
-    public MessageResponseDTO delete(Long id) throws PersonNotFoundException {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isEmpty()) {
-            throw new PersonNotFoundException(id);
-        }
+    public void delete(Long id) throws PersonNotFoundException {
+        personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
         personRepository.deleteById(id);
-
-        MessageResponseDTO messageResponse = createMessageResponse("Person successfully deleted with ID ", id);
-
-        return messageResponse;
     }
 
     private MessageResponseDTO createMessageResponse(String s, Long id2) {
