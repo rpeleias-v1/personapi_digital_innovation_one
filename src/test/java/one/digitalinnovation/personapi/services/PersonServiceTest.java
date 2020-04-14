@@ -30,7 +30,7 @@ public class PersonServiceTest {
     private PersonService personService;
 
     @Test
-    public void testGivenPersonDTOThenReturnSuccessSavedMessage() {
+    void testGivenPersonDTOThenReturnSuccessSavedMessage() {
         PersonDTO personDTO = createFakeDTO();
         Person expectedSavedPerson = createFakeEntity();
 
