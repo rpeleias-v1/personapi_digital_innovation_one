@@ -63,9 +63,9 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-    private MessageResponseDTO createMessageResponse(String s, Long id2) {
+    private MessageResponseDTO createMessageResponse(String message, Long id) {
         return MessageResponseDTO.builder()
-                .message(s + id2)
+                .message(message + id)
                 .build();
     }
 }

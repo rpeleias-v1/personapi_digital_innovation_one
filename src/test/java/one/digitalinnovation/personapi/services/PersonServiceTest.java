@@ -12,11 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static one.digitalinnovation.personapi.utils.PersonUtils.createFakeDTO;
 import static one.digitalinnovation.personapi.utils.PersonUtils.createFakeEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -41,10 +44,9 @@ public class PersonServiceTest {
         when(personMapper.toModel(personDTO)).thenReturn(expectedSavedPerson);
         when(personRepository.save(any(Person.class))).thenReturn(expectedSavedPerson);
 
-        MessageResponseDTO expectedSuccessMessage = createExpectedSuccessMessage(expectedSavedPerson.getId());
         MessageResponseDTO successMessage = personService.create(personDTO);
 
-        assertEquals(expectedSuccessMessage, successMessage);
+        assertEquals("Person successfully created with ID 1", successMessage.getMessage());
     }
 
     @Test
@@ -65,18 +67,65 @@ public class PersonServiceTest {
     }
 
     @Test
-    void testGivenInvalidPersonIdThenThrowException(){
-        var invalidId = 1L;
-        when(personRepository.findById(invalidId))
+    void testGivenInvalidPersonIdThenThrowException() {
+        var invalidPersonId = 1L;
+        when(personRepository.findById(invalidPersonId))
                 .thenReturn(Optional.ofNullable(any(Person.class)));
 
-        assertThrows(PersonNotFoundException.class, () -> personService.findById(invalidId));
+        assertThrows(PersonNotFoundException.class, () -> personService.findById(invalidPersonId));
     }
 
-    private MessageResponseDTO createExpectedSuccessMessage(Long savedPersonId) {
-        return MessageResponseDTO.builder()
-                .message("Person successfully created with ID " + savedPersonId)
-                .build();
+    @Test
+    void testGivenNoDataThenReturnAllPeopleRegistered() {
+        List<Person> expectedRegisteredPeople = Collections.singletonList(createFakeEntity());
+        PersonDTO personDTO = createFakeDTO();
+
+        when(personRepository.findAll()).thenReturn(expectedRegisteredPeople);
+        when(personMapper.toDTO(any(Person.class))).thenReturn(personDTO);
+
+        List<PersonDTO> expectedPeopleDTOList = personService.listAll();
+
+        assertFalse(expectedPeopleDTOList.isEmpty());
+        assertEquals(expectedPeopleDTOList.get(0).getId(), personDTO.getId());
+    }
+
+    @Test
+    void testGivenValidPersonIdAndUpdateInfoThenReturnSuccesOnUpdate() throws PersonNotFoundException {
+        var updatedPersonId = 2L;
+
+        PersonDTO updatePersonDTORequest = createFakeDTO();
+        updatePersonDTORequest.setId(updatedPersonId);
+        updatePersonDTORequest.setLastName("Peleias updated");
+
+        Person expectedPersonToUpdate = createFakeEntity();
+        expectedPersonToUpdate.setId(updatedPersonId);
+
+        Person expectedPersonUpdated = createFakeEntity();
+        expectedPersonUpdated.setId(updatedPersonId);
+        expectedPersonToUpdate.setLastName(updatePersonDTORequest.getLastName());
+
+        when(personRepository.findById(updatedPersonId)).thenReturn(Optional.of(expectedPersonUpdated));
+        when(personMapper.toModel(updatePersonDTORequest)).thenReturn(expectedPersonUpdated);
+        when(personRepository.save(any(Person.class))).thenReturn(expectedPersonUpdated);
+
+        MessageResponseDTO successMessage = personService.update(updatedPersonId, updatePersonDTORequest);
+
+        assertEquals("Person successfully updated with ID 2", successMessage.getMessage());
+    }
+
+
+    @Test
+    void testGivenInvalidPersonIdAndUpdateInfoThenThrowExceptionOnUpdate() throws PersonNotFoundException {
+        var invalidPersonId = 1L;
+
+        PersonDTO updatePersonDTORequest = createFakeDTO();
+        updatePersonDTORequest.setId(invalidPersonId);
+        updatePersonDTORequest.setLastName("Peleias updated");
+
+        when(personRepository.findById(invalidPersonId))
+                .thenReturn(Optional.ofNullable(any(Person.class)));
+
+        assertThrows(PersonNotFoundException.class, () -> personService.update(invalidPersonId, updatePersonDTORequest));
     }
 
 }
