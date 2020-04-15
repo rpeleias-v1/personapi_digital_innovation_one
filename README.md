@@ -6,8 +6,8 @@ Durante a sessão, serão desenvolvidos e abordados os seguintes tópicos:
 
 * Setup inicial de projeto com o Spring Boot Initialzr 
 * Criação de modelo de dados para o mapeamento de entidades em bancos de dados
-* Desenvolvimento de operações de gerenciamento de usuários (Cadastro, Leitura, Atualização e Remoção de pessoas de um sistema).
-* Relação de cada uma das operações acima com o padrão arquitetural REST, e a explicação de cada um dos conceitos REST envolvidos.
+* Desenvolvimento de operações de gerenciamento de usuários (Cadastro, leitura, atualização e remoção de pessoas de um sistema).
+* Relação de cada uma das operações acima com o padrão arquitetural REST, e a explicação de cada um dos conceitos REST envolvidos durante o desenvolvimento do projeto.
 * Desenvolvimento de testes unitários para validação das funcionalidades
 * Implantação do sistema na nuvem através do Heroku
 
@@ -24,7 +24,7 @@ http://localhost:8080/api/v1/people
 ```
 
 
-São necessários os seguintes pré-requisitos para a execução dos projetos da aula:
+São necessários os seguintes pré-requisitos para a execução do projeto desenvolvido durante a aula:
 
 * Java 11 ou versões superiores.
 * Maven 3.6.3 ou versões superiores.
@@ -48,7 +48,7 @@ Abaixo, seguem links bem bacanas, sobre tópicos mencionados durante a aula:
 * [Documentação oficial do Map Struct](https://mapstruct.org/)
 * [Referência para o padrão arquitetural REST](https://restfulapi.net/)
 
-[Neste link](https://drive.google.com/file/d/1DgGT0PrLRWSlysraVojk3xNm86kxfoTh/view), seguem os slides apresentados como o roteiro utilizado para o desenvolviemnto do projeto da nossa sessão.
+[Neste link](https://drive.google.com/file/d/1DgGT0PrLRWSlysraVojk3xNm86kxfoTh/view), seguem os slides apresentados como o roteiro utilizado para o desenvolvimento do projeto da nossa sessão.
 
 
 
