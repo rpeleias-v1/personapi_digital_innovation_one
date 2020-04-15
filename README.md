@@ -31,7 +31,7 @@ São necessários os seguintes pré-requisitos para a execução dos projetos da
 * Intellj IDEA Community Edition ou sua IDE favorita.
 * Controle de versão GIT instalado na sua máquina.
 * Conta no GitHub para o armazenamento do seu projeto na nuvem.
-* Conta no Heroku para o 
+* Conta no Heroku para o deploy do projeto na nuvem
 * Muita vontade de aprender e compartilhar conhecimento :)
 
 Abaixo, seguem links bem bacanas, sobre tópicos mencionados durante a aula:
@@ -48,7 +48,7 @@ Abaixo, seguem links bem bacanas, sobre tópicos mencionados durante a aula:
 * [Documentação oficial do Map Struct](https://mapstruct.org/)
 * [Referência para o padrão arquitetural REST](https://restfulapi.net/)
 
-Neste link, segue os slides apresentados como o roteiro utilizado para o desenvolviemnto do projeto da nossa sessão.
+[Neste link](https://drive.google.com/file/d/1DgGT0PrLRWSlysraVojk3xNm86kxfoTh/view), seguem os slides apresentados como o roteiro utilizado para o desenvolviemnto do projeto da nossa sessão.
 
 
 
