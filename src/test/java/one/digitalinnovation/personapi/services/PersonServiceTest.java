@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -113,7 +115,6 @@ public class PersonServiceTest {
         assertEquals("Person successfully updated with ID 2", successMessage.getMessage());
     }
 
-
     @Test
     void testGivenInvalidPersonIdAndUpdateInfoThenThrowExceptionOnUpdate() throws PersonNotFoundException {
         var invalidPersonId = 1L;
@@ -126,6 +127,27 @@ public class PersonServiceTest {
                 .thenReturn(Optional.ofNullable(any(Person.class)));
 
         assertThrows(PersonNotFoundException.class, () -> personService.update(invalidPersonId, updatePersonDTORequest));
+    }
+
+    @Test
+    void testGivenValidPersonIdThenReturnSuccesOnDelete() throws PersonNotFoundException {
+        var deletedPersonId = 1L;
+        Person expectedPersonToDelete = createFakeEntity();
+
+        when(personRepository.findById(deletedPersonId)).thenReturn(Optional.of(expectedPersonToDelete));
+        personService.delete(deletedPersonId);
+
+        verify(personRepository, times(1)).deleteById(deletedPersonId);
+    }
+
+    @Test
+    void testGivenInvalidPersonIdThenReturnSuccesOnDelete() throws PersonNotFoundException {
+        var invalidPersonId = 1L;
+        
+        when(personRepository.findById(invalidPersonId))
+                .thenReturn(Optional.ofNullable(any(Person.class)));
+
+        assertThrows(PersonNotFoundException.class, () -> personService.delete(invalidPersonId));
     }
 
 }
