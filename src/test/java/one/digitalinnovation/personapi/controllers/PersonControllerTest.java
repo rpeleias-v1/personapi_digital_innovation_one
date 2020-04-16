@@ -4,12 +4,16 @@ import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.exception.PersonNotFoundException;
 import one.digitalinnovation.personapi.services.PersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,16 +29,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PersonController.class)
+@ExtendWith(MockitoExtension.class)
 public class PersonControllerTest {
 
     private static final String PEOPLE_API_URL_PATH = "/api/v1/people";
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    private PersonController personController;
+
+    @Mock
     private PersonService personService;
+
+    @BeforeEach
+    void setUp() {
+        personController = new PersonController(personService);
+        mockMvc = MockMvcBuilders.standaloneSetup(personController)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setViewResolvers((viewName, locale) -> new MappingJackson2JsonView())
+                .build();
+    }
 
     @Test
     void testWhenPOSTIsCalledThenAPersonShouldBeCreated() throws Exception {
