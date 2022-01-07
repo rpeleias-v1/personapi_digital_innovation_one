@@ -68,4 +68,9 @@ public class PersonService {
                 .message(s + id2)
                 .build();
     }
+
+    public void deleteAll() {
+        personRepository.deleteAll();
+    }
+
 }
